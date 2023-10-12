@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+          background-color: #55090944;
+      }
+      
+      .calculator {
+          background-color: #4e797e99;
+          border-radius: 10px;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+          padding: 20px;
+          text-align: center;
+      }
+      
+      input[type="text"] {
+          width: 100%;
+          margin-bottom: 10px;
+          padding: 10px;
+          font-size: 18px;
+          text-align: right;
+      }
+      
+      .buttons {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          grid-gap: 10px;
+      }
+      
+      button {
+          padding: 10px;
+          font-size: 18px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+      }
+      
+      .operator {
+          background-color: #f0f0f0;
+      }
+      
+      .operator.equal {
+          background-color: #d39152;
+          color: #fff;
+      }
+      .zero {
+          grid-column: span 2;
+      }
+      
+      button:hover {
+          background-color: #928282;
+      }
+      
+      #display{
+          padding: 2px;
+      }
+    </style>
+    <title>Simple Calculator</title>
+</head>
+<body>
+
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+        <div class="buttons">
+            <button class="operator">C</button>
+            <button>9</button>
+            <button>8</button>
+            <button>7</button>
+            <button class="operator">*</button> 
+            <button>6</button>
+            <button>5</button>
+            <button>4</button>
+            <button class="operator">/</button>
+            <button>3</button>
+            <button>2</button>
+            <button>1</button>
+            <button class="operator">-</button>
+            <button class="operator">+</button>
+            <button class="zero">0</button>
+            <button>.</button>
+            <button class="operator equal">=</button>
+        </div>
+    </div>
+    <script>
+        
+const display = document.getElementById('display');
+const buttons = document.querySelectorAll('button');
+
+let currentInput = '';
+let operator = '';
+let previousInput = '';
+
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        const buttonText = button.innerText;
+
+        if (buttonText === 'C') {
+            clear();
+        } else if (buttonText === '=') {
+            calculate();
+        } else if (buttonText.match(/[0-9.]/)) {
+            appendNumber(buttonText);
+        } else if (buttonText.match(/[\+\-\*\/]/)) {
+            setOperator(buttonText);
+        }
+    });
+});
+
+function appendNumber(number) {
+    currentInput += number;
+    display.value = currentInput;
+}
+
+function setOperator(op) {
+    if (operator !== '') {
+        calculate();
+    }
+    operator = op;
+    previousInput = currentInput;
+    currentInput = '';
+}
+
+function calculate() {
+    if (operator === '') return;
+
+    const num1 = parseFloat(previousInput);
+    const num2 = parseFloat(currentInput);
+
+    if (isNaN(num1) || isNaN(num2)) return;
+
+    let result;
+    switch (operator) {
+        case '+':
+            result = num1 + num2;
+            break;
+        case '-':
+            result = num1 - num2;
+            break;
+        case '*':
+            result = num1 * num2;
+            break;
+        case '/':
+            result = num1 / num2;
+            break;
+    }
+
+    display.value = result;
+    currentInput = result.toString();
+    operator = '';
+    previousInput = '';
+}
+
+function clear() {
+    currentInput = '';
+    operator = '';
+    previousInput = '';
+    display.value = '';
+}
+
+
+    </script>
+</body>
+</html>
+
+  

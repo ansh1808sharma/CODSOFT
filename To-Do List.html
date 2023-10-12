@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    
+body, ul {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Basic styling */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #d2e9f5;
+  }
+  
+  .app {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: rgb(204, 207, 237);
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    background-color: #0675ec;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
+  .task-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .task:last-child {
+    border-bottom: none;
+  }
+  
+  .task .task-text {
+    flex-grow: 1;
+    margin-left: 15px;
+    font-size: 18px;
+  }
+  
+  .completed {
+    text-decoration: line-through;
+    color: #ccc;
+  }
+  
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: rgb(253, 254, 255);
+    border-top: 1px solid #ccc;
+  }
+  
+  .filter-options button {
+    background-color: transparent;
+    border: none;
+    padding: 5px 10px;
+    color: #007BFF;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .filter-options button.active {
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .clear-completed {
+    color: #FF4500;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .clear-completed:hover {
+    color: #c62828;
+  }
+</style>
+  <title>Advanced Todo List App</title>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <h1>Todo List</h1>
+    </div>
+    <div class="input-container">
+      <input type="text" id="taskInput" placeholder="Add a new task">
+      <button id="addTaskBtn">+</button>
+    </div>
+    <ul id="taskList" class="task-list"></ul>
+    
+    <div class="footer">
+      <div class="filter-options">
+        <button id="allBtn" class="active">All</button>
+        <button id="activeBtn">Active</button>
+        <button id="completedBtn">Completed</button>
+      </div>
+      <button id="clearCompletedBtn">Clear Completed</button>
+    </div>
+  </div>
+  <script>
+    
+   const taskInput = document.getElementById('taskInput');
+   const addTaskBtn = document.getElementById('addTaskBtn');
+   const taskList = document.getElementById('taskList');
+   const allBtn = document.getElementById('allBtn');
+   const activeBtn = document.getElementById('activeBtn');
+   const completedBtn = document.getElementById('completedBtn');
+   const clearCompletedBtn = document.getElementById('clearCompletedBtn');
+   
+   addTaskBtn.addEventListener('click', addTask);
+   
+   function addTask() {
+     const taskText = taskInput.value.trim();
+   
+     if (taskText !== '') {
+       const li = document.createElement('li');
+       li.innerHTML = `
+         <li><input type="checkbox">
+         <span>${taskText}</span>
+         <button class="delete-btn">Delete</button></li><br>
+       `;
+       taskList.appendChild(li);
+   
+       taskInput.value = '';
+     }
+   }
+   
+   taskList.addEventListener('click', (event) => {
+     if (event.target.classList.contains('delete-btn')) {
+       event.target.parentElement.remove();
+     } else if (event.target.type === 'checkbox') {
+       const taskText = event.target.nextElementSibling;
+       taskText.classList.toggle('completed');
+     }
+   });
+   
+   allBtn.addEventListener('click', () => {
+     showAllTasks();
+   });
+   
+   activeBtn.addEventListener('click', () => {
+     showActiveTasks();
+   });
+   
+   completedBtn.addEventListener('click', () => {
+     showCompletedTasks();
+   });
+   
+   clearCompletedBtn.addEventListener('click', () => {
+     clearCompletedTasks();
+   });
+   
+   function showAllTasks() {
+     [...taskList.children].forEach((task) => {
+       task.style.display = 'flex';
+     });
+   }
+   
+   function showActiveTasks() {
+     [...taskList.children].forEach((task) => {
+       if (!task.querySelector('input[type="checkbox"]').checked) {
+         task.style.display = 'flex';
+       } else {
+         task.style.display = 'none';
+       }
+     });
+   }
+   
+   function showCompletedTasks() {
+     [...taskList.children].forEach((task) => {
+       if (task.querySelector('input[type="checkbox"]').checked) {
+         task.style.display = 'flex';
+       } else {
+         task.style.display = 'none';
+       }
+     });
+   }
+   
+   function clearCompletedTasks() {
+     [...taskList.children].forEach((task) => {
+       if (task.querySelector('input[type="checkbox"]').checked) {
+         task.remove();
+       }
+     });
+   }
+  </script>
+</body>
+</html>
+
+
+          
+
+
+
+          
